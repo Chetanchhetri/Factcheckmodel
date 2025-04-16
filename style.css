@@ -1,0 +1,35 @@
+#introhead{
+    margin: 5vh;
+    font-size: 6vh;
+    text-align: center;
+    position: relative;
+    top: 2vh;
+    font-family:Arial, Helvetica, sans-serif;
+    color: purple;
+    font-weight: bolder;
+}
+
+#introtext{
+    margin: 5vh;
+    font-size: 3vh;
+    font-family:Arial, Helvetica, sans-serif;
+    color: black;
+    opacity: 0.5;
+}
+
+#but{
+    border-radius: 2rem;
+    margin: 2vh;
+    background-color: rgb(55, 55, 207);
+    color: white;
+
+}
+.textinput{
+    border-radius: 1rem;
+    height: 20vh;
+    width: 50vh;
+    margin: 2vh;
+}
+.fileinput{
+    margin: 2vh;
+}
