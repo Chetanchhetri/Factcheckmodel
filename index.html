@@ -1,36 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <title>Fact Check</title>
+<title>Chatbot</title>
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  #chat-container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  #chat-history {
+    height: 300px;
+    overflow-y: scroll;
+  }
+  
+  .user-message {
+    text-align: right;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .bot-message {
+    text-align: left;
+    padding: 10px;
+    background-color: #e0f0e0;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+  
+  form {
+    display: flex;
+  }
+  
+  input {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #loader {
+  display: none; /* Hide by default */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+  </style>
 </head>
 <body>
-    <div class="intro">
-        <h1 id="introhead">
-            Separating Fact from Fiction with AI
-        </h1>
-        <br>
-        <p id="introtext">
-            Our platform is designed to empower you with verified information. The process begins with your contribution – simply input a
-            factual claim or upload an image. Once submitted, our intelligent system takes over, meticulously examining your entry. 
-            for textual facts, we delve into comprehensive research to ascertain their authenticity and source reliability. Similarly, 
-            uploaded images undergo analysis to ensure their integrity and context. Ultimately, our goal is to synthesize this verification processinto a valuable output, 
-            providing you with informed insights and a clearer understanding based on our rigorous assessment.</p>
-    </div>
-    <br>
-    <div class="func">
-        <form action="#">
-        <div class="input">
-            <input type="text" class="textinput" id="sub" placeholder="Enter a claim here...">
-            <br>
-            <input type="file" class="fileinput" id="sub">
-        </div>
-        <br>
-        <button id="but">CHECK FACT</button>
-        </form>
-    </div>
+  <div id="chat-container">
+  <h1>Coding Money Chatbot</h1>
+  <div id="chat-history"></div>
+  <form id="chat-form">
+    <input type="text" id="user-input" placeholder="Enter your message">
+    <button type="submit">Send</button>
+  </form>
+</div>
+<div id="loader">
+  <img src="loader.gif" width="150px" alt="Loading...">
+</div>
+  <script>
+    const chatHistory = document.getElementById('chat-history');
+    const userInput = document.getElementById('user-input');
+    const form = document.getElementById('chat-form');
+
+    async function sendMessage() {
+      const userMessage = userInput.value;
+      userInput.value = ''; // Clear input field
+      console.log(userMessage)
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userInput: userMessage }),
+        });
+
+        const data = await response.json();
+        console.log(data)
+        const botMessage = data.response;
+        console.log(botMessage)
+        // Add chat message to the chat history
+        chatHistory.innerHTML += `<div class="user-message">${userMessage}</div>`;
+        chatHistory.innerHTML += `<div class="bot-message">${botMessage}</div>`;
+
+        // Scroll to the bottom of the chat history
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle errors gracefully, e.g., display an error message to the user
+      }
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent form submission
+      const loader = document.getElementById('loader');
+      loader.style.display = 'block'; // Show the loader
+      sendMessage().finally(() => {
+      loader.style.display = 'none'; // Hide the loader after the message is sent
+    });;
+    });
+  </script>
 </body>
 </html>
