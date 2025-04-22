@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .resizable-container {
+      width: 300px;
+      height: 150px;
+      border: 2px solid #000;
+      resize: both;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      /* Hide scrollbar - Firefox */
+      scrollbar-width: none;
+    }
+
+    /* Hide scrollbar - WebKit (Chrome, Edge, Safari) */
+    .resizable-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .text {
+      display: inline-block;
+      white-space: nowrap;
+      font-size: 40px;
+      transition: transform 0.1s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="resizable-container" id="container">
+    <div class="text" id="text">Shrink to Fit!</div>
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const text = document.getElementById('text');
+
+    function resizeText() {
+      text.style.transform = 'scale(1)';
+      text.style.transformOrigin = 'center';
+
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+      const textWidth = text.scrollWidth;
+      const textHeight = text.scrollHeight;
+
+      const scaleX = containerWidth / textWidth;
+      const scaleY = containerHeight / textHeight;
+
+      const scale = Math.min(scaleX, scaleY, 1);
+      text.style.transform = `scale(${scale})`;
+    }
+
+    const resizeObserver = new ResizeObserver(resizeText);
+    resizeObserver.observe(container);
+
+    resizeText();
+  </script>
+
+</body>
+</html>
